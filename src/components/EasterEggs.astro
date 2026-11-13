@@ -44,16 +44,33 @@
   </svg>
 </template>
 <template id="sharkTpl">
-  <svg viewBox="0 0 260 90" class="critter whaleshark">
-    <!-- drawn head-left, mirrored so the head leads as it swims right -->
-    <g transform="translate(260 0) scale(-1 1)">
-    <circle cx="22" cy="40" r="2.2" fill="#fff" opacity=".8"/>
-    <path d="M8 44c20-18 60-26 110-26 30 0 56 4 76 10l30-24-8 34 36 6-36 8 10 30-34-20c-22 8-50 12-76 12-50 0-88-10-108-30z" fill="currentColor"/>
-    <g fill="#fff" opacity=".55">
-      <circle cx="50" cy="40" r="3"/><circle cx="70" cy="34" r="3"/><circle cx="90" cy="42" r="3"/><circle cx="110" cy="32" r="3"/>
-      <circle cx="130" cy="40" r="3"/><circle cx="150" cy="34" r="3"/><circle cx="80" cy="52" r="3"/><circle cx="120" cy="50" r="3"/>
-      <circle cx="160" cy="46" r="3"/><circle cx="60" cy="54" r="2.5"/><circle cx="100" cy="24" r="2.5"/>
+  <!-- Whale shark, side view. Drawn head-left, then mirrored so the head leads as it swims right. -->
+  <svg viewBox="0 0 300 120" class="critter whaleshark">
+    <g transform="translate(300 0) scale(-1 1)" fill="currentColor">
+      <!-- fins (behind body) -->
+      <path d="M128 30 C134 16 144 6 158 2 C155 12 158 22 168 32 Z"/>               <!-- first dorsal -->
+      <path d="M204 43 C208 37 213 33 220 31 C218 36 220 42 224 47 Z"/>             <!-- second dorsal -->
+      <path d="M70 80 C78 95 92 107 110 114 C105 102 101 92 98 82 Z"/>              <!-- pectoral -->
+      <path d="M174 79 C178 87 184 92 192 94 C190 87 190 81 190 76 Z"/>             <!-- pelvic -->
+      <path d="M212 68 C216 74 221 77 227 79 C225 73 225 68 227 63 Z"/>             <!-- anal -->
+      <path d="M234 52 C250 40 268 22 288 4 C283 26 278 44 271 57 C278 67 284 78 290 94 C272 84 254 73 234 63 Z"/> <!-- crescent tail -->
+      <!-- body: broad flat head, tapering to the tail -->
+      <path d="M5 58 C5 47 14 39 30 35 C70 25 120 24 160 30 C190 34 214 42 238 52 L238 63 C214 71 190 78 160 82 C120 88 70 88 36 80 C17 76 6 69 5 58 Z"/>
     </g>
+    <g transform="translate(300 0) scale(-1 1)" fill="none" stroke="#fff" stroke-linecap="round">
+      <path d="M7 61 C16 64 26 64 36 61" stroke-width="2" opacity=".7"/>               <!-- wide mouth -->
+      <path d="M48 46 L50 70 M54 45 L56 71 M60 44 L62 72 M66 44 L67 72" stroke-width="1.5" opacity=".35"/> <!-- gill slits -->
+      <path d="M44 42 C100 31 170 34 232 54 M50 56 C110 50 170 54 232 58" stroke-width="1.5" opacity=".25"/> <!-- body ridges -->
+    </g>
+    <g transform="translate(300 0) scale(-1 1)" fill="#fff">
+      <circle cx="24" cy="50" r="2.2" opacity=".9"/>                                  <!-- eye -->
+      <g opacity=".5">
+        <circle cx="80" cy="38" r="2.6"/><circle cx="96" cy="44" r="2.6"/><circle cx="112" cy="36" r="2.6"/><circle cx="128" cy="44" r="2.6"/>
+        <circle cx="144" cy="38" r="2.6"/><circle cx="160" cy="46" r="2.6"/><circle cx="176" cy="42" r="2.4"/><circle cx="192" cy="48" r="2.2"/>
+        <circle cx="88" cy="62" r="2.6"/><circle cx="104" cy="68" r="2.6"/><circle cx="120" cy="60" r="2.6"/><circle cx="136" cy="68" r="2.6"/>
+        <circle cx="152" cy="62" r="2.6"/><circle cx="168" cy="66" r="2.4"/><circle cx="184" cy="62" r="2.2"/><circle cx="206" cy="56" r="2"/>
+        <circle cx="34" cy="44" r="1.8"/><circle cx="40" cy="54" r="1.8"/><circle cx="30" cy="64" r="1.8"/>
+      </g>
     </g>
   </svg>
 </template>
@@ -80,7 +97,7 @@
   }
   .critter { position: absolute; color: #0a2a5c; filter: drop-shadow(0 20px 30px rgba(0,0,0,.25)); }
   .critter.manta { width: min(200px, 40vw); color: #10234d; animation: glide 9s linear forwards; }
-  .critter.whaleshark { width: min(520px, 90vw); color: #1b3f73; animation: glide 13s linear forwards; }
+  .critter.whaleshark { width: min(560px, 90vw); color: #1b3f73; animation: glide 13s linear forwards; }
   @keyframes glide {
     0% { transform: translateX(-110%) translateY(0) rotate(4deg); }
     25% { transform: translateX(25vw) translateY(-30px) rotate(-3deg); }
