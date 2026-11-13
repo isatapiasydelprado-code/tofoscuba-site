@@ -86,3 +86,47 @@ export const team = [
   { name: 'Daniel & Armando', role: 'Divemasters', text: 'Mozambican divemasters who know every reef by heart.' },
   { name: 'Five & Manuel', role: 'Skippers', text: 'Getting you through the Tofo surf safely, every day.' },
 ];
+
+// Dive sites — from tofoscuba.com/dive-sites and the individual site pages.
+export const diveFacts = [
+  { icon: 'fa6-solid:map-location-dot', value: '20+', label: 'named reefs to explore' },
+  { icon: 'fa6-solid:temperature-half', value: '18–28 °C', label: 'cooler Jun–Oct, warmest Dec–Apr' },
+  { icon: 'fa6-solid:eye', value: '5–15 m+', label: 'visibility changes by the hour' },
+  { icon: 'fa6-solid:binoculars', value: 'Year-round', label: 'whale sharks · humpbacks Jun–Oct' },
+];
+
+export type Level = 'beginner' | 'openwater' | 'advanced';
+export const levelLabels: Record<Level, string> = {
+  beginner: 'Discover Scuba +',
+  openwater: 'Open Water +',
+  advanced: 'Advanced +',
+};
+
+export const diveSites: {
+  name: string; level: Level; depth: string; distance: string; time: string; text: string; tags: string[];
+}[] = [
+  { name: 'Clownfish Reef', level: 'beginner', depth: '9–11 m', distance: '800 m', time: '2 min',
+    text: 'A flat, sheltered reef in Tofo Bay with plate coral and small tropical fish — no current or surge. Perfect for first dives and training.',
+    tags: ['Training', 'Coral', 'Calm'] },
+  { name: 'Salon', level: 'openwater', depth: '11–16 m', distance: '3 km', time: '6 min',
+    text: 'An 80 m reef with two resident green turtles, rays, crocodile fish, octopus, reef squid and plenty of macro.',
+    tags: ['Turtles', 'Rays', 'Macro'] },
+  { name: 'Marble Arch', level: 'openwater', depth: '14–19 m', distance: '9 km', time: '15 min',
+    text: 'A sandy bowl ringed by a wall with two archways. Overhangs hide turtles, lobsters and Spanish dancers, with a chance of a whale shark.',
+    tags: ['Archways', 'Turtles', 'Whale sharks'] },
+  { name: 'Office', level: 'advanced', depth: '19–24 m', distance: '15 km', time: '30 min',
+    text: 'Ledges and sandy channels topped with manta cleaning stations. Leopard and whitetip sharks, potato bass and giant morays.',
+    tags: ['Mantas', 'Sharks', 'Ledges'] },
+  { name: 'Manta Reef', level: 'advanced', depth: '21–26 m', distance: '16 km', time: '30 min',
+    text: 'Tofo’s most famous dive: a drift over an amphitheatre of pinnacles with two huge manta cleaning stations, shrouded in fish.',
+    tags: ['Mantas', 'Drift', 'Pinnacles'] },
+  { name: 'Amazon', level: 'advanced', depth: '22–28 m', distance: '21 km', time: '45 min',
+    text: 'Two ledges in an L with craters and big swim-throughs. Grey reef, blacktip, leopard sharks and even scalloped hammerheads. Only in perfect conditions.',
+    tags: ['Sharks', 'Swim-throughs', 'Blue water'] },
+  { name: 'Hogwarts', level: 'advanced', depth: '24–30+ m', distance: '18 km', time: '35 min',
+    text: 'A magical wall with an archway, a huge swim-through and two cleaning stations for giant and reef mantas. Watch for frogfish and garden eels.',
+    tags: ['Mantas', 'Archway', 'Frogfish'] },
+  { name: 'Giants Castle', level: 'advanced', depth: '26–30+ m', distance: '6 km', time: '10 min',
+    text: 'A 6 m wall running for 2 km with potato groupers, manta stations, barracuda, guitar sharks and tornadoes of giant trevally. Nitrox recommended.',
+    tags: ['Wall', 'Mantas', 'Big schools'] },
+];

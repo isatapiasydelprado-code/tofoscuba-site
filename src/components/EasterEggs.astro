@@ -20,18 +20,40 @@
 <div class="sea-layer" id="seaLayer" aria-hidden="true"></div>
 
 <template id="mantaTpl">
-  <svg viewBox="0 0 200 120" class="critter manta">
-    <path d="M100 28c-10 0-16 8-20 14-14-2-38-6-66 4 18 6 40 16 54 30 8 8 16 14 22 16l-2 26 4 2 4-2 4-2-2-26c6-2 14-8 22-16 14-14 36-24 54-30-28-10-52-6-66-4-4-6-10-14-20-14z" fill="currentColor"/>
-    <path d="M92 30c-2-6-6-10-10-10m26 10c2-6 6-10 10-10" stroke="currentColor" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <!-- Manta seen from above, head pointing right (direction of travel) -->
+  <svg viewBox="0 0 190 220" class="critter manta">
+    <!-- whip tail -->
+    <path d="M58 108 C40 108 22 112 2 120" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <!-- body + swept-back wings -->
+    <path d="M150 110
+             C150 94 140 80 124 68
+             C106 54 84 32 64 6
+             C68 34 72 58 72 74
+             C72 88 66 98 56 104
+             C52 107 52 113 56 116
+             C66 122 72 132 72 146
+             C72 162 68 186 64 214
+             C84 188 106 166 124 152
+             C140 140 150 126 150 110 Z" fill="currentColor"/>
+    <!-- cephalic fins (the 'horns' in front of the mouth) -->
+    <path d="M146 98 C158 92 170 92 178 98 C170 102 160 104 148 104 Z" fill="currentColor"/>
+    <path d="M146 122 C158 128 170 128 178 122 C170 118 160 116 148 116 Z" fill="currentColor"/>
+    <!-- pale shoulder patches -->
+    <path d="M128 84 C116 80 104 74 94 64 C100 78 108 88 120 94 Z" fill="#fff" opacity=".22"/>
+    <path d="M128 136 C116 140 104 146 94 156 C100 142 108 132 120 126 Z" fill="#fff" opacity=".22"/>
   </svg>
 </template>
 <template id="sharkTpl">
   <svg viewBox="0 0 260 90" class="critter whaleshark">
+    <!-- drawn head-left, mirrored so the head leads as it swims right -->
+    <g transform="translate(260 0) scale(-1 1)">
+    <circle cx="22" cy="40" r="2.2" fill="#fff" opacity=".8"/>
     <path d="M8 44c20-18 60-26 110-26 30 0 56 4 76 10l30-24-8 34 36 6-36 8 10 30-34-20c-22 8-50 12-76 12-50 0-88-10-108-30z" fill="currentColor"/>
     <g fill="#fff" opacity=".55">
       <circle cx="50" cy="40" r="3"/><circle cx="70" cy="34" r="3"/><circle cx="90" cy="42" r="3"/><circle cx="110" cy="32" r="3"/>
       <circle cx="130" cy="40" r="3"/><circle cx="150" cy="34" r="3"/><circle cx="80" cy="52" r="3"/><circle cx="120" cy="50" r="3"/>
       <circle cx="160" cy="46" r="3"/><circle cx="60" cy="54" r="2.5"/><circle cx="100" cy="24" r="2.5"/>
+    </g>
     </g>
   </svg>
 </template>
@@ -57,7 +79,7 @@
     100% { transform: translate(var(--drift, 0px), -70vh) scale(1); opacity: 0; }
   }
   .critter { position: absolute; color: #0a2a5c; filter: drop-shadow(0 20px 30px rgba(0,0,0,.25)); }
-  .critter.manta { width: min(280px, 50vw); color: #10234d; animation: glide 9s linear forwards; }
+  .critter.manta { width: min(200px, 40vw); color: #10234d; animation: glide 9s linear forwards; }
   .critter.whaleshark { width: min(520px, 90vw); color: #1b3f73; animation: glide 13s linear forwards; }
   @keyframes glide {
     0% { transform: translateX(-110%) translateY(0) rotate(4deg); }

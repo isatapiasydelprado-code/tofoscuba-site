@@ -4,10 +4,12 @@ import EasterEggs from '../components/EasterEggs.astro';
 import '../styles/global.css';
 import {
   contact, socials, images, highlights, marineLife, courses, funDives, facilities, team,
+  diveFacts, diveSites, levelLabels,
 } from '../data/site';
 
 const nav = [
   { href: '#ocean', label: 'The Ocean' },
+  { href: '#sites', label: 'Dive Sites' },
   { href: '#courses', label: 'Courses & Prices' },
   { href: '#stay', label: 'Dive & Stay' },
   { href: '#team', label: 'Team' },
@@ -103,6 +105,52 @@ const year = new Date().getFullYear();
               </figure>
             ))}
           </div>
+        </div>
+      </section>
+
+      <!-- DIVE SITES -->
+      <section id="sites" class="section section-sand">
+        <div class="container">
+          <div class="section-head">
+            <p class="kicker">Dive sites</p>
+            <h2>Reefs for every level</h2>
+            <p>Tofo's reefs sit on the sea floor with blue water in between: no sloping walls, just pinnacles, ledges and cleaning stations where the big animals come in. Our instructors pick the site each morning based on the weather and your experience.</p>
+          </div>
+
+          <div class="grid-4 dive-facts">
+            {diveFacts.map((f) => (
+              <div class="dive-fact">
+                <Icon name={f.icon} />
+                <div><strong>{f.value}</strong><span>{f.label}</span></div>
+              </div>
+            ))}
+          </div>
+
+          <div class="site-filter" role="group" aria-label="Filter dive sites by level">
+            <button type="button" class="active" data-level="all">All sites</button>
+            <button type="button" data-level="beginner">Beginner</button>
+            <button type="button" data-level="openwater">Open Water</button>
+            <button type="button" data-level="advanced">Advanced</button>
+          </div>
+
+          <div class="site-grid">
+            {diveSites.map((s) => (
+              <article class="site" data-level={s.level}>
+                <header>
+                  <h3>{s.name}</h3>
+                  <span class={`lvl lvl-${s.level}`}>{levelLabels[s.level]}</span>
+                </header>
+                <div class="site-meta">
+                  <span><Icon name="fa6-solid:arrows-down-to-line" /> {s.depth}</span>
+                  <span><Icon name="fa6-solid:location-dot" /> {s.distance}</span>
+                  <span><Icon name="fa6-solid:clock" /> {s.time}</span>
+                </div>
+                <p>{s.text}</p>
+                <ul class="tags">{s.tags.map((t) => <li>{t}</li>)}</ul>
+              </article>
+            ))}
+          </div>
+          <p class="sites-more"><Icon name="line-md:map-marker-loop" /> Plus Colosseum, Table Top, Sherwood, Devils, Krakatoa, Chambers and more. Ask us what's diving best this week.</p>
         </div>
       </section>
 
@@ -256,6 +304,16 @@ const year = new Date().getFullYear();
       };
       btn.addEventListener('click', () => setOpen(!document.body.classList.contains('menu-open')));
       nav.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setOpen(false)));
+
+      // Dive-site level filter
+      const filterBtns = document.querySelectorAll<HTMLButtonElement>('.site-filter button');
+      filterBtns.forEach((b) => b.addEventListener('click', () => {
+        filterBtns.forEach((x) => x.classList.toggle('active', x === b));
+        const lvl = b.dataset.level;
+        document.querySelectorAll<HTMLElement>('.site').forEach((s) => {
+          s.hidden = lvl !== 'all' && s.dataset.level !== lvl;
+        });
+      }));
 
       const bar = document.querySelector('.topbar')!;
       const onScroll = () => bar.classList.toggle('scrolled', window.scrollY > 40);
