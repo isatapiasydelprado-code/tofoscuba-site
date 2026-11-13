@@ -4,7 +4,7 @@ One-page site for [Tofo Scuba](https://www.tofoscuba.com/), a PADI 5 Star Gold P
 
 - **Framework:** [Astro](https://astro.build) 5 (static output)
 - **Icons:** Font Awesome 6 + [line-md](https://github.com/cyberalien/line-md) animated icons via `astro-icon`
-- **Hosting:** Netlify (`netlify.toml`)
+- **Hosting:** GitHub Pages via `.github/workflows/deploy.yml` (live preview: https://isatapiasydelprado-code.github.io/tofoscuba-site/). `netlify.toml` is kept for Netlify later.
 
 ## Develop
 

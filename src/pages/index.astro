@@ -26,7 +26,7 @@ const year = new Date().getFullYear();
     <meta property="og:title" content="Tofo Scuba · Dive & Stay in Paradise" />
     <meta property="og:description" content="Manta rays, whale sharks and PADI courses on Tofo Beach, Mozambique." />
     <meta property="og:image" content={images.hero} />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href={`${import.meta.env.BASE_URL.replace(/\/$/, "")}/favicon.svg`} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
