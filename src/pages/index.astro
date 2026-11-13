@@ -1,0 +1,266 @@
+---
+import { Icon } from 'astro-icon/components';
+import EasterEggs from '../components/EasterEggs.astro';
+import '../styles/global.css';
+import {
+  contact, socials, images, highlights, marineLife, courses, funDives, facilities, team,
+} from '../data/site';
+
+const nav = [
+  { href: '#ocean', label: 'The Ocean' },
+  { href: '#courses', label: 'Courses & Prices' },
+  { href: '#stay', label: 'Dive & Stay' },
+  { href: '#team', label: 'Team' },
+  { href: '#contact', label: 'Contact' },
+];
+const waLink = `https://wa.me/${contact.whatsapp.replace('+', '')}?text=${encodeURIComponent("Hi Tofo Scuba! I'd like to book some diving.")}`;
+const year = new Date().getFullYear();
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Tofo Scuba · Dive & Stay in Paradise · Tofo Beach, Mozambique</title>
+    <meta name="description" content="PADI 5 Star Gold Palm dive resort on Tofo Beach, Mozambique. Dive with manta rays and whale sharks. Courses from Discover Scuba to Divemaster." />
+    <meta property="og:title" content="Tofo Scuba · Dive & Stay in Paradise" />
+    <meta property="og:description" content="Manta rays, whale sharks and PADI courses on Tofo Beach, Mozambique." />
+    <meta property="og:image" content={images.hero} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <header class="topbar" id="top">
+      <div class="container topbar-inner">
+        <a href="#top" class="brand" aria-label="Tofo Scuba home">
+          <img src={images.logo} alt="" width="44" height="44" />
+          <span>Tofo<b>Scuba</b></span>
+        </a>
+        <nav class="nav" id="nav" aria-label="Main">
+          {nav.map((n) => <a href={n.href}>{n.label}</a>)}
+          <a class="btn btn-sm btn-accent" href={waLink} target="_blank" rel="noopener">
+            <Icon name="fa6-brands:whatsapp" /> Book now
+          </a>
+        </nav>
+        <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="nav">
+          <Icon name="line-md:menu" class="i-open" />
+          <Icon name="line-md:close" class="i-close" />
+        </button>
+      </div>
+    </header>
+
+    <main>
+      <!-- HERO -->
+      <section class="hero" style={`--hero:url('${images.hero}')`}>
+        <div class="hero-overlay"></div>
+        <div class="container hero-content">
+          <p class="eyebrow"><Icon name="line-md:map-marker-loop" /> Praia do Tofo · Mozambique</p>
+          <h1>Dive &amp; stay<br /><em>in paradise.</em></h1>
+          <p class="lead">Swim with manta rays and whale sharks on Mozambique's most famous coastline — from a PADI 5 Star Gold Palm resort just 30 metres from the Indian Ocean.</p>
+          <div class="hero-cta">
+            <a class="btn btn-accent" href={waLink} target="_blank" rel="noopener">
+              <Icon name="fa6-brands:whatsapp" /> Chat on WhatsApp
+            </a>
+            <a class="btn btn-ghost" href="#courses">
+              View courses <Icon name="line-md:arrow-right" />
+            </a>
+          </div>
+        </div>
+        <a href="#highlights" class="scroll-cue" aria-label="Scroll down"><Icon name="line-md:chevron-small-down" /></a>
+      </section>
+
+      <!-- HIGHLIGHTS -->
+      <section id="highlights" class="highlights">
+        <div class="container grid-4">
+          {highlights.map((h) => (
+            <div class="hl">
+              <span class="hl-icon"><Icon name={h.icon} /></span>
+              <h3>{h.title}</h3>
+              <p>{h.text}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- OCEAN -->
+      <section id="ocean" class="section">
+        <div class="container">
+          <div class="section-head">
+            <p class="kicker">Meet the giants</p>
+            <h2>What's waiting under the waves</h2>
+            <p>Tofo sits where warm Indian Ocean currents bring big animals close to shore. It's one of the best places on Earth to see manta rays and whale sharks.</p>
+          </div>
+          <div class="cards-4">
+            {marineLife.map((m) => (
+              <figure class="photo-card">
+                <img src={images[m.img]} alt={m.title} loading="lazy" width="900" height="1100" />
+                <figcaption>
+                  <h3>{m.title}</h3>
+                  <p>{m.text}</p>
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <!-- COURSES -->
+      <section id="courses" class="section section-deep">
+        <div class="container">
+          <div class="section-head light">
+            <p class="kicker">PADI courses · prices in USD</p>
+            <h2>Learn to dive, or go further</h2>
+            <p>From your very first breath underwater to going pro as a Divemaster — small groups, experienced instructors and the only heated training pool in Tofo.</p>
+          </div>
+          <div class="course-grid">
+            {courses.map((c) => (
+              <article class={`course ${c.featured ? 'featured' : ''}`}>
+                {c.featured && <span class="badge">Most popular</span>}
+                <span class="course-icon"><Icon name={c.icon} /></span>
+                <h3>{c.name}</h3>
+                <p>{c.note}</p>
+                <p class="price">{c.price ? <>${c.price}</> : <span class="ask">On request</span>}</p>
+              </article>
+            ))}
+          </div>
+
+          <div class="fun-dives">
+            <div>
+              <h3><Icon name="fa6-solid:water" /> Fun dives &amp; safaris</h3>
+              <p>Already certified? Join our daily boat dives to near and far reefs, or hop on an Ocean Safari.</p>
+            </div>
+            <ul>
+              {funDives.map((f) => (
+                <li><span>{f.name}</span><b>{f.price ? `$${f.price}` : 'On request'}</b></li>
+              ))}
+            </ul>
+          </div>
+          <p class="fineprint">* Rental gear excludes computers, torches, gloves, hoods, vests and cameras. Unlimited Nitrox, far-reef supplements and a weekly government tax apply — ask us for details and our Stay &amp; Dive specials.</p>
+        </div>
+      </section>
+
+      <!-- STAY -->
+      <section id="stay" class="section">
+        <div class="container split">
+          <div class="split-media">
+            <img src={images.lodge} alt="Tilak Lodge in Tofo" loading="lazy" width="1400" height="1000" />
+          </div>
+          <div class="split-text">
+            <p class="kicker">Dive + stay packages</p>
+            <h2>Sleep a short stroll from the boats</h2>
+            <p><strong>Tilak Lodge</strong> is just 600 m down the beach from the dive centre and about 1 km from Tofo market — an easy walk to the bars and restaurants, but far enough from the noise.</p>
+            <ul class="checks">
+              <li><Icon name="line-md:confirm-circle" /> Accessible from both beach and road</li>
+              <li><Icon name="line-md:confirm-circle" /> Same owners as Tofo Scuba — one booking</li>
+              <li><Icon name="line-md:confirm-circle" /> Ask about combined Stay &amp; Dive specials</li>
+            </ul>
+            <a class="btn btn-primary" href={`mailto:${contact.email}?subject=Dive%20%26%20Stay%20enquiry`}>
+              <Icon name="line-md:email" /> Enquire about packages
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- FACILITIES -->
+      <section class="section section-sand">
+        <div class="container">
+          <div class="section-head">
+            <p class="kicker">Our dive centre</p>
+            <h2>Serious kit, beach-side</h2>
+            <p>One of the most advanced filling stations in Mozambique, with three Bauer compressors and a Nuvair Nitrox membrane system.</p>
+          </div>
+          <div class="grid-4 stats">
+            {facilities.map((f) => (
+              <div class="stat">
+                <Icon name={f.icon} />
+                <strong>{f.value}</strong>
+                <span>{f.label}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <!-- TEAM -->
+      <section id="team" class="section">
+        <div class="container">
+          <div class="section-head">
+            <p class="kicker">Who you'll dive with</p>
+            <h2>A local team that knows these reefs</h2>
+          </div>
+          <img class="team-photo" src={images.team} alt="The Tofo Scuba team" loading="lazy" width="1600" height="900" />
+          <div class="team-grid">
+            {team.map((t) => (
+              <div class="member">
+                <h3>{t.name}</h3>
+                <p class="role">{t.role}</p>
+                <p>{t.text}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <!-- CONTACT -->
+      <section id="contact" class="section section-deep contact">
+        <div class="container split">
+          <div>
+            <p class="kicker">Ready to get wet?</p>
+            <h2>Book your dives</h2>
+            <p>Message us with your dates, certification level and what you'd love to see. Brodie at reception will get back to you.</p>
+            <a class="btn btn-accent" href={waLink} target="_blank" rel="noopener">
+              <Icon name="fa6-brands:whatsapp" /> WhatsApp us
+            </a>
+          </div>
+          <ul class="contact-list">
+            <li>
+              <Icon name="line-md:email" />
+              <a href={`mailto:${contact.email}`}>{contact.email}</a>
+            </li>
+            {contact.phones.map((p) => (
+              <li><Icon name="line-md:phone-call-loop" /><a href={`tel:${p.tel}`}>{p.label}</a></li>
+            ))}
+            <li>
+              <Icon name="line-md:map-marker-loop" />
+              <a href={contact.mapUrl} target="_blank" rel="noopener">{contact.address}</a>
+            </li>
+            <li class="socials">
+              {socials.map((s) => (
+                <a href={s.url} target="_blank" rel="noopener" aria-label={s.name} title={s.name}><Icon name={s.icon} /></a>
+              ))}
+            </li>
+          </ul>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="container footer-inner">
+        <p>© {year} Tofo Scuba · Praia do Tofo, Mozambique</p>
+        <p class="partners">PADI 5 Star Gold Palm Resort · DAN · Green Star</p>
+        <p class="psst" title="Try typing manta, shark or bubbles">Psst… divers can type <i>manta</i> 🤿</p>
+        <a href="#top" class="to-top" aria-label="Back to top"><Icon name="line-md:arrow-up" /></a>
+      </div>
+    </footer>
+
+    <EasterEggs />
+
+    <script>
+      const btn = document.getElementById('menuBtn')!;
+      const nav = document.getElementById('nav')!;
+      const setOpen = (open: boolean) => {
+        document.body.classList.toggle('menu-open', open);
+        btn.setAttribute('aria-expanded', String(open));
+      };
+      btn.addEventListener('click', () => setOpen(!document.body.classList.contains('menu-open')));
+      nav.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setOpen(false)));
+
+      const bar = document.querySelector('.topbar')!;
+      const onScroll = () => bar.classList.toggle('scrolled', window.scrollY > 40);
+      onScroll();
+      window.addEventListener('scroll', onScroll, { passive: true });
+    </script>
+  </body>
+</html>

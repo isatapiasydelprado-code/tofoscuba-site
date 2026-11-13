@@ -1,0 +1,191 @@
+---
+/*
+  Dive easter eggs 🤿
+  1. Depth gauge  — a small dive computer shows your "depth" as you scroll.
+                    Hit the bottom and it warns you; head back up fast and it
+                    reminds you to do a 3-minute safety stop at 5 m.
+  2. Bubbles      — click/tap anywhere in the hero to exhale bubbles.
+  3. Sea life     — type "manta" or "shark" (or the Konami code) and
+                    something big glides past.
+  4. OK signal    — click the logo 5 times for a diver's 👌.
+  5. Console      — open dev tools for a hello from the surface.
+*/
+---
+<div class="dive-computer" id="diveComputer" aria-hidden="true" title="Your dive computer">
+  <span class="dc-label">DEPTH</span>
+  <span class="dc-depth"><b id="dcDepth">0.0</b>m</span>
+  <span class="dc-time" id="dcTime">00:00</span>
+</div>
+<div class="dive-toast" id="diveToast" role="status" aria-live="polite"></div>
+<div class="sea-layer" id="seaLayer" aria-hidden="true"></div>
+
+<template id="mantaTpl">
+  <svg viewBox="0 0 200 120" class="critter manta">
+    <path d="M100 28c-10 0-16 8-20 14-14-2-38-6-66 4 18 6 40 16 54 30 8 8 16 14 22 16l-2 26 4 2 4-2 4-2-2-26c6-2 14-8 22-16 14-14 36-24 54-30-28-10-52-6-66-4-4-6-10-14-20-14z" fill="currentColor"/>
+    <path d="M92 30c-2-6-6-10-10-10m26 10c2-6 6-10 10-10" stroke="currentColor" stroke-width="4" fill="none" stroke-linecap="round"/>
+  </svg>
+</template>
+<template id="sharkTpl">
+  <svg viewBox="0 0 260 90" class="critter whaleshark">
+    <path d="M8 44c20-18 60-26 110-26 30 0 56 4 76 10l30-24-8 34 36 6-36 8 10 30-34-20c-22 8-50 12-76 12-50 0-88-10-108-30z" fill="currentColor"/>
+    <g fill="#fff" opacity=".55">
+      <circle cx="50" cy="40" r="3"/><circle cx="70" cy="34" r="3"/><circle cx="90" cy="42" r="3"/><circle cx="110" cy="32" r="3"/>
+      <circle cx="130" cy="40" r="3"/><circle cx="150" cy="34" r="3"/><circle cx="80" cy="52" r="3"/><circle cx="120" cy="50" r="3"/>
+      <circle cx="160" cy="46" r="3"/><circle cx="60" cy="54" r="2.5"/><circle cx="100" cy="24" r="2.5"/>
+    </g>
+  </svg>
+</template>
+
+<style is:global>
+  .dive-computer { position: fixed; left: 16px; bottom: 16px; z-index: 40; display: grid; grid-template-columns: auto auto; gap: 0 10px; align-items: baseline; padding: 8px 12px; border-radius: 12px; background: rgba(11, 26, 60, .85); backdrop-filter: blur(6px); color: #d6f3fe; font: 600 11px/1.3 ui-monospace, Menlo, monospace; border: 1px solid rgba(0, 176, 240, .35); box-shadow: 0 6px 20px rgba(0,0,0,.25); opacity: 0; transform: translateY(10px); transition: opacity .3s, transform .3s, border-color .3s; pointer-events: none; }
+  .dive-computer.on { opacity: 1; transform: none; }
+  .dive-computer.warn { border-color: #ff5a5a; }
+  .dive-computer.warn .dc-depth { color: #ff8a8a; }
+  .dc-label { grid-column: 1 / -1; letter-spacing: .2em; color: #00b0f0; font-size: 9px; }
+  .dc-depth { font-size: 13px; }
+  .dc-depth b { font-size: 22px; }
+  .dc-time { opacity: .7; }
+
+  .dive-toast { position: fixed; left: 50%; bottom: 24px; z-index: 60; transform: translate(-50%, 140%); max-width: calc(100% - 32px); padding: 12px 18px; border-radius: 999px; background: #0a6cc2; color: #fff; font-weight: 600; font-size: .95rem; box-shadow: 0 10px 30px rgba(0,0,0,.3); transition: transform .4s cubic-bezier(.2,.9,.3,1.3); text-align: center; }
+  .dive-toast.show { transform: translate(-50%, 0); }
+
+  .sea-layer { position: fixed; inset: 0; pointer-events: none; z-index: 45; overflow: hidden; }
+  .bubble { position: absolute; border-radius: 50%; border: 1.5px solid rgba(255,255,255,.8); background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.7), rgba(255,255,255,.08) 60%); animation: rise var(--dur, 2.4s) ease-in forwards; }
+  @keyframes rise {
+    0% { transform: translate(0, 0) scale(.4); opacity: 0; }
+    10% { opacity: 1; }
+    100% { transform: translate(var(--drift, 0px), -70vh) scale(1); opacity: 0; }
+  }
+  .critter { position: absolute; color: #0a2a5c; filter: drop-shadow(0 20px 30px rgba(0,0,0,.25)); }
+  .critter.manta { width: min(280px, 50vw); color: #10234d; animation: glide 9s linear forwards; }
+  .critter.whaleshark { width: min(520px, 90vw); color: #1b3f73; animation: glide 13s linear forwards; }
+  @keyframes glide {
+    0% { transform: translateX(-110%) translateY(0) rotate(4deg); }
+    25% { transform: translateX(25vw) translateY(-30px) rotate(-3deg); }
+    50% { transform: translateX(50vw) translateY(10px) rotate(3deg); }
+    75% { transform: translateX(80vw) translateY(-20px) rotate(-2deg); }
+    100% { transform: translateX(120vw) translateY(0) rotate(2deg); }
+  }
+  .hero { cursor: crosshair; }
+  @media (prefers-reduced-motion: reduce) { .critter, .bubble { display: none; } }
+</style>
+
+<script>
+  const layer = document.getElementById('seaLayer')!;
+  const toastEl = document.getElementById('diveToast')!;
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let toastTimer: number | undefined;
+
+  function toast(msg: string, ms = 3800) {
+    toastEl.textContent = msg;
+    toastEl.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = window.setTimeout(() => toastEl.classList.remove('show'), ms);
+  }
+
+  // ---------- 1. Bubbles ----------
+  function bubbles(x: number, y: number, n = 8) {
+    if (reduced) return;
+    for (let i = 0; i < n; i++) {
+      const b = document.createElement('span');
+      const size = 6 + Math.random() * 18;
+      b.className = 'bubble';
+      Object.assign(b.style, {
+        width: `${size}px`, height: `${size}px`,
+        left: `${x - size / 2 + (Math.random() - .5) * 30}px`, top: `${y - size / 2}px`,
+        animationDelay: `${Math.random() * .4}s`,
+      });
+      b.style.setProperty('--dur', `${1.8 + Math.random() * 1.6}s`);
+      b.style.setProperty('--drift', `${(Math.random() - .5) * 80}px`);
+      layer.appendChild(b);
+      b.addEventListener('animationend', () => b.remove());
+    }
+  }
+  document.querySelector('.hero')?.addEventListener('click', (e) => {
+    const ev = e as MouseEvent;
+    if ((ev.target as HTMLElement).closest('a,button')) return;
+    bubbles(ev.clientX, ev.clientY);
+  });
+
+  // ---------- 2. Depth gauge + safety stop ----------
+  const MAX_DEPTH = 30; // metres, bottom of the page
+  const dc = document.getElementById('diveComputer')!;
+  const depthEl = document.getElementById('dcDepth')!;
+  const timeEl = document.getElementById('dcTime')!;
+  const start = Date.now();
+  let maxReached = 0, warnedDeep = false, lastY = scrollY, lastT = performance.now(), toldStop = false;
+
+  function updateDepth() {
+    const range = document.documentElement.scrollHeight - innerHeight;
+    const depth = range > 0 ? (scrollY / range) * MAX_DEPTH : 0;
+    depthEl.textContent = depth.toFixed(1);
+    dc.classList.toggle('on', depth > 0.5);
+    dc.classList.toggle('warn', depth > 28);
+    maxReached = Math.max(maxReached, depth);
+
+    if (depth > 29.5 && !warnedDeep) {
+      warnedDeep = true;
+      toast('⚠️ 30 m — you’ve hit the bottom! Time to book your dive ↑');
+    }
+    // Fast ascent from deep → safety stop reminder
+    const now = performance.now();
+    const speed = (lastY - scrollY) / Math.max(1, now - lastT); // px per ms upward
+    if (!toldStop && maxReached > 15 && depth < 6 && speed > 3) {
+      toldStop = true;
+      toast('🛑 Ascending too fast! Don’t forget your 3-minute safety stop at 5 m.');
+    }
+    lastY = scrollY; lastT = now;
+  }
+  addEventListener('scroll', updateDepth, { passive: true });
+  setInterval(() => {
+    const s = Math.floor((Date.now() - start) / 1000);
+    timeEl.textContent = `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`;
+  }, 1000);
+  updateDepth();
+
+  // ---------- 3. Sea life on secret words / Konami ----------
+  function spawn(kind: 'manta' | 'shark') {
+    if (reduced) { toast(kind === 'manta' ? '🌊 A manta ray just glided past!' : '🦈 A whale shark swam by!'); return; }
+    const tpl = document.getElementById(kind === 'manta' ? 'mantaTpl' : 'sharkTpl') as HTMLTemplateElement;
+    const el = tpl.content.firstElementChild!.cloneNode(true) as SVGElement;
+    el.style.top = `${15 + Math.random() * 50}vh`;
+    layer.appendChild(el);
+    el.addEventListener('animationend', () => el.remove());
+    toast(kind === 'manta' ? '🌊 Manta spotted! Tofo is famous for them.' : '🦈 Whale shark! Gentle giants — plankton only, promise.');
+  }
+  const konami = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+  let typed = '', kIdx = 0;
+  addEventListener('keydown', (e) => {
+    const t = e.target as HTMLElement;
+    if (t && (t.isContentEditable || /INPUT|TEXTAREA|SELECT/.test(t.tagName))) return;
+    kIdx = e.key === konami[kIdx] ? kIdx + 1 : (e.key === konami[0] ? 1 : 0);
+    if (kIdx === konami.length) { kIdx = 0; spawn('manta'); setTimeout(() => spawn('shark'), 1500); return; }
+    if (e.key.length === 1) {
+      typed = (typed + e.key.toLowerCase()).slice(-12);
+      if (typed.endsWith('manta')) spawn('manta');
+      else if (typed.endsWith('shark')) spawn('shark');
+      else if (typed.endsWith('bubbles')) bubbles(innerWidth / 2, innerHeight - 40, 30);
+    }
+  });
+
+  // ---------- 4. OK signal on logo ----------
+  let logoClicks = 0, logoTimer: number | undefined;
+  document.querySelector('.brand img')?.addEventListener('click', () => {
+    logoClicks++;
+    clearTimeout(logoTimer);
+    logoTimer = window.setTimeout(() => (logoClicks = 0), 1200);
+    if (logoClicks === 5) {
+      logoClicks = 0;
+      const r = (document.querySelector('.brand img') as HTMLElement).getBoundingClientRect();
+      bubbles(r.left + r.width / 2, r.top + r.height, 16);
+      toast('👌 OK? OK! (That’s diver for “all good”.)');
+    }
+  });
+
+  // ---------- 5. Console hello ----------
+  console.log(
+    '%c  ><(((º>   ><>   ><(((º>\n%c🤿 Hello from the surface, fellow diver!\nTry typing "manta", "shark" or "bubbles" on the page — or the Konami code.',
+    'color:#00b0f0;font:bold 16px monospace',
+    'color:#0a6cc2;font:600 13px sans-serif',
+  );
+</script>
